@@ -291,28 +291,9 @@ module.exports = {
                 var pengLocations = [],
                     pengType = [],
                     pengNotes = [];
-
-                    
                     
 
-                $('#activepenguin-container').filter(function() {
-                    var data = $(this);
-       
-                    
-                    console.log(data.find('.title-text').eq(0));
-                    // msg.channel.sendMessage("", {embed: {
-                    //     color: 0xA26993,
-                    //     fields: [
-                    //         {
-                    //             name: 'Nemi World Info',
-                    //             value: worldInfo,
-                    //         }
-                    //     ],
-                    //     image: {
-                    //         url: nemiPic,
-                    //     },                        
-                    // }});
-                });
+            
             }
         });
     }
