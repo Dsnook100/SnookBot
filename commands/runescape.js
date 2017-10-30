@@ -1,4 +1,4 @@
-var request = require('request');
+/* var request = require('request');
 var cheerio = require('cheerio');
 
 
@@ -185,7 +185,6 @@ module.exports = {
 			boostTime += `${minutesUntilBoost} minute${minutesUntilBoost > 0 && minutesUntilBoost < 2 ? '' : 's'}`;
 		}
 
-		/* CACHE TIME STR */
 		if (minutesUntil === 0) {
 			cacheTime += '1 hour';
 		}
@@ -281,20 +280,7 @@ module.exports = {
                 });
             }
         });
-    },
-    pengs: (msg) => {
-        url = 'http://2016.world60pengs.com/';
-        request(url, function(error, response, html){
-            if(!error){
-                var $ = cheerio.load(html);
-               
-                var pengLocations = [],
-                    pengType = [],
-                    pengNotes = [];
-                    
-
-            
-            }
-        });
     }
 }
+
+*/

@@ -6,8 +6,9 @@ const weather = require('./commands/weather.js');
 const music = require('./commands/music.js');
 const prune = require('./commands/prune.js');
 const google = require('./commands/google.js');
-const pick = require('./commands/pick.js');
+const eightball = require('./commands/8ball.js');
 const runescape = require('./commands/runescape.js');
+const currency = require('./commands/currency.js');
 
 //When bot is logged in and ready.
 client.on('ready', () => {
@@ -27,14 +28,18 @@ client.on('guildCreate', guild => {
 
 //Used for when a new member joins the discord server.
 client.on('guildMemberAdd', member =>{
-	let guild = member.guild;
-	guild.defaultChannel.sendMessage(`${member.user.username} has joined ${guild.name}`);
+	const channel = member.guild.channels.find('name', 'general');
+	if (!channel) return;
+	const message = `Welcome ${member.user.username}! Thanks for joining ${guild.name}.`;
+	channel.send(message);
 });
 
 //When a member leaves a discord server.
 client.on('guildMemberRemove', member =>{
-	let guild = member.guild;
-	guild.defaultChannel.sendMessage(`${member.user.username} has left ${guild.name}`);
+	const channel = member.guild.channels.find('name', 'general');
+	if (!channel) return;
+	const message = `${member.user.username} has left the server.`;
+	channel.send(message);
 });
 
 //Client register message command
@@ -45,75 +50,51 @@ var permissions = [
 
 
 //All commands that are usable by the bot.
-const commands = {
-	'commands': (msg) => {
-		var cmds = Object.keys(commands);
-		for(var i=0; i < cmds.length; i++){ 
-			cmds[i] = "."+cmds[i];
-		}
 
-		//Removes the "command" command from the list.
-		cmds.shift();
+var commands = {
+    setValue: function( props, value ) {
+        while ( props.length ) this[ props.pop() ] = value;
+    }
+}
 
-		msg.channel.sendMessage("", {embed: {
-			color: 16715535,
-			fields: [
-				{
-					name: 'List of commands:',
-					value: cmds.join('\n')
-				}
-			],
-		}});
-	},
-	'weather': (msg) => {
-		weather(msg);
-	},
-	'play': (msg) => {
-		music.play(msg);
-	},
-	'pause': (msg) => {
-		music.pause(msg);
-	},
-	'resume': (msg) => {
-		music.resume(msg);
-	},
-	'skip': (msg) => {
-		music.skip(msg);
-	},
-	'joinVoice': (msg) => {
-		music.joinVoice(msg);
-	},
-	'prune': (msg) => {
-		prune.amount(msg);
-	},
-	'google': (msg) => {
-		google.result(msg);
-	},
-	'pick': (msg) => {
-		pick.randomPick(msg);
-	},
-	'vos': (msg) => {
-		runescape.vos(msg);
-	},
-	'arax': (msg) => {
-		runescape.arax(msg);
-	},
-	'gtime': (msg) => {
-		runescape.gtime(msg);
-	},
-	'cache': (msg) => {
-		runescape.cache(msg);
-	},
-	'viswax': (msg) => {
-		runescape.viswax(msg);
-	},
-	'nemi': (msg) => {
-		runescape.nemi(msg);
-	},
-	'pengs': (msg) => {
-		runescape.pengs(msg);
+/*commands.setValue( [ "commands", "cmds", "cmd", "help"] , (msg) => {
+	var cmds = Object.keys(commands);
+	console.log(cmds);
+	for(var i=0; i < cmds.length; i++){ 
+		cmds[i] = "."+cmds[i];
 	}
-};
+
+	//Removes the "command" command from the list.
+	cmds.shift();
+
+	msg.channel.sendMessage("", {embed: {
+		color: 16715535,
+		fields: [
+			{
+				name: 'List of commands:',
+				value: cmds.join('\n')
+			}
+		],
+	}});
+});
+*/
+
+commands.setValue(["weather", "w"],  (msg) => { weather(msg); });
+commands.setValue(["google", "goog", "g"] , (msg) => { google.result(msg); });
+commands.setValue(["8ball"] , (msg) => { eightball.eightball(msg); });
+
+commands.setValue(["play"], (msg) => { music.play(msg); });
+commands.setValue(["pause"], (msg) => { music.pause(msg); });
+commands.setValue(["resume"], (msg) => { music.resume(msg); });
+commands.setValue(["joinvoice", "jv"], (msg) => { music.joinVoice(msg); });
+commands.setValue(["prune", "del"], (msg) => { prune.amount(msg); });
+
+commands.setValue(["register", "reg"], (msg) => { currency.register(msg); });
+commands.setValue(["balance", "bal"], (msg) => { currency.balance(msg); });
+commands.setValue(["coinflip", "cf"], (msg) => { currency.coinflip(msg); });
+commands.setValue(["blackjack", "blkj"], (msg) => { currency.blackjack(msg); });
+commands.setValue(["give", "pay"], (msg) => { currency.give(msg); });
+//commands.setValue(["roll"], (msg) => { currency.roll(msg); });
 
 client.on("message", msg => {
 	if (!msg.content.startsWith(prefix)) return;
